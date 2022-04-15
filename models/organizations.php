@@ -31,4 +31,16 @@ class Organizations{
 
         return $stmt;
     }
+
+    public function add_new_organization($payload){
+        $query = "INSERT INTO organizations(name,address,website,email,mobile,logo) VALUES(:name,:address,:website,:email,:mobile,:logo)";
+
+        //Prepare
+        $stmt = $this->conn->prepare($query);
+
+        //Execute
+        $stmt->execute(["name"=>$payload["name"],"address"=>$payload["address"],"website"=>$payload["website"],"email"=>$payload["email"],"mobile"=>$payload["mobile"],"logo"=>$payload["logo"]]);
+
+        return $stmt;
+    }
 }

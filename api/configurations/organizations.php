@@ -1,8 +1,14 @@
 <?php 
 
 //Headers
+
+use LDAP\Result;
+
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 include_once "../../config/database.php";
 include_once "../../models/organizations.php";
@@ -43,7 +49,7 @@ switch($method){
             $data["data"] = array("id"=>$ID,"organization_name"=>$name,"address"=>$address,"website"=>$website,"email"=>$email,"mobile"=>$mobile,"logo"=>$logo);    
             $data["status"] = 200;
             $data["message"] = "Success";
-            
+
             http_response_code(200);
             echo json_encode($data);
         }
@@ -51,8 +57,22 @@ switch($method){
     }
     break;
     case "POST":{
-        var_dump($_POST);
-        echo $_POST;
+        $json = file_get_contents('php://input');
+
+        $data = json_decode($json);
+
+        $payload = array("name"=>$data->name,"address"=>$data->address,"website"=>$data->website,"email"=>$data->email,"mobile"=>$data->mobile,"logo"=>$data->logo);
+
+        $organizations->add_new_organization($payload);
+
+        $data = array();
+        $data["data"] = $payload;    
+        $data["status"] = 201;
+        $data["message"] = "New Organization Added";
+
+        http_response_code(201);
+
+        echo json_encode($data);
     }
     break;
     default:{
