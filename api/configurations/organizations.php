@@ -9,6 +9,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+$json = file_get_contents('php://input');
 
 include_once "../../config/database.php";
 include_once "../../models/organizations.php";
@@ -57,8 +58,6 @@ switch($method){
     }
     break;
     case "POST":{
-        $json = file_get_contents('php://input');
-
         $data = json_decode($json);
 
         $payload = array("name"=>$data->name,"address"=>$data->address,"website"=>$data->website,"email"=>$data->email,"mobile"=>$data->mobile,"logo"=>$data->logo);
@@ -71,8 +70,40 @@ switch($method){
         $data["message"] = "New Organization Added";
 
         http_response_code(201);
-
         echo json_encode($data);
+        die;
+    }
+    break;
+    case "PATCH":{
+        if(!isset($_GET["id"])){
+            http_response_code(304);
+            die;
+        }
+        $data = json_decode($json);
+        
+        $payload = array("name"=>$data->name,"address"=>$data->address,"website"=>$data->website,"email"=>$data->email,"mobile"=>$data->mobile,"logo"=>$data->logo);
+
+        $response=  $organizations->update_organization($_GET["id"],$payload);
+
+
+        if($response){
+            $data = array();
+            $data["payload"] = $payload;    
+            $data["status"] = 200;
+            $data["message"] = "Organization Updated";
+    
+            http_response_code(200);
+            echo json_encode($data);
+            die;
+        }else{
+            $data = array();
+            $data["payload"] = $payload;    
+            $data["status"] = 304;
+            $data["message"] = "Not Modified";
+    
+            http_response_code(200);
+            echo json_encode($data);
+        }
     }
     break;
     default:{
