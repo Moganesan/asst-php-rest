@@ -59,4 +59,20 @@ class Organizations{
            return false;
        }
     }
+
+    public function delete_organization($org_id){
+        $query = "DELETE FROM organizations WHERE ID = :org_id LIMIT 1";
+
+        //Prepare
+        $stmt = $this->conn->prepare($query);
+
+        //Execute
+        $stmt->execute(["org_id"=>$org_id]);
+
+        if($stmt->rowCount()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

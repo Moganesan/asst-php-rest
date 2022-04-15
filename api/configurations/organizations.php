@@ -106,6 +106,33 @@ switch($method){
         }
     }
     break;
+    case "DELETE":{
+        if(!isset($_GET["id"])){
+            http_response_code(304);
+            die;
+        }
+        $response = $organizations->delete_organization($_GET["id"]);
+
+        if($response){
+            $data = array();
+            $data["data"] = [];    
+            $data["status"] = 200;
+            $data["message"] = "Organization Deleted";
+    
+            http_response_code(200);
+            echo json_encode($data);
+            die;
+        }else{
+            $data = array();
+            $data["data"] = [];    
+            $data["status"] = 304;
+            $data["message"] = "Not Modified";
+    
+            http_response_code(200);
+            echo json_encode($data);
+        }
+    }
+    break;
     default:{
         http_response_code(400);
         echo json_encode(array("data"=>[],"message"=>"Invalid Request"));
