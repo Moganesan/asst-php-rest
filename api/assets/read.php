@@ -13,6 +13,7 @@ $database = new Database();
 
 $db = $database->connect();
 
+
 //Instantiate Asset object
 
 $asset = new Assets($db);
@@ -33,7 +34,7 @@ if($num>0){
         extract($row);
 
         $asset_item = array(
-            'organization'=>$organization
+            'id'=>$id
         );
 
         //Push to data

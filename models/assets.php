@@ -26,50 +26,15 @@ class Assets{
     public $modified_at;
 
     //
-    public function __construct($db,
-     $organization_id,
-     $building_id,
-     $branch_id,
-     $floor_id,
-     $category_id,
-     $sub_category_id,
-     $asset_tag,
-     $serial,
-     $model,
-     $status,
-     $asset_name,
-     $supplier,
-     $order_no,
-     $purchase_cost,
-     $working_condition,
-     $created_at,
-     $modified_at)
-{
+    public function __construct($db)
+    {
         $this->conn = $db;
-        this->$id;
-        this->$organization_id;
-        this->$building_id;
-        this->$branch_id;
-        this->$floor_id;
-        this->$category_id;
-        this->$sub_category_id;
-        this->$asset_tag;
-        this->$serial;
-        this->$model;
-        this->$status;
-        this->$asset_name;
-        this->$supplier;
-        this->$order_no;
-        this->$purchase_cost;
-        this->$working_condition;
-        this->$created_at;
-        public $modified_at;
     }
 
     //Get Assets
 
     public function read(){
-        $query = "SELECT * FROM assets";
+        $query = "SELECT * FROM branches";
 
         //Prepare
         $stmt = $this->conn->prepare($query);
@@ -81,7 +46,5 @@ class Assets{
         return $stmt;
     }
 
-    public function insert(){
-        $query = "INSERT INTO assets(building,branch,floor,category,sub_category,asset_tag,serial,modal,status,asset_name,supplier,order_no,purchase_cost,warranty_month,image,working_condition,amc_details,amc_done_date,)"
-    }
+
 }
