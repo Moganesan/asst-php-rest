@@ -1,9 +1,4 @@
 <?php 
-
-//Headers
-
-use LDAP\Result;
-
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
@@ -44,6 +39,21 @@ switch($method){
         if($_GET["id"]){
             $result= $organizations->get_organization_with_id($_GET["id"]);
             $organization = $result->fetch(PDO::FETCH_ASSOC);
+
+            $data = array();
+            $data["data"] = array();    
+            $data["status"];
+            $data["message"];
+
+            if(!$organization){
+                $data["status"] = 404;
+                $data["message"] = "Not Found!";
+
+                http_response_code(404);
+                echo json_encode($data);
+                die;
+            }
+
             extract($organization);
 
             $data = array();
@@ -53,8 +63,9 @@ switch($method){
 
             http_response_code(200);
             echo json_encode($data);
+
+            die;
         }
-        die;
     }
     break;
     case "POST":{
